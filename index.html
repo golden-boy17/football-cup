@@ -318,8 +318,8 @@
         }
 
         async function sendTgMsg(chatId, text) {
-            const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-            await fetch(url, {
+            const url = `https://square-sky-72af.golovindd4.workers.dev/bot${BOT_TOKEN}/sendMessage`;
+            const res = await fetch(url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -328,6 +328,10 @@
                     parse_mode: 'HTML'
                 })
             });
+            const data = await res.json();
+            if (!data.ok) {
+                tg.showAlert(`Ошибка Telegram (${chatId}): ${data.description}`);
+            }
         }
 
         tg.MainButton.onClick(async () => {
@@ -366,7 +370,7 @@
                     body: JSON.stringify(payload)
                 });
 
-                // 2. Отправляем в группу организаторов напрямую с устройства пользователя
+                // 2. Отправляем в группу организаторов через Cloudflare Worker
                 const adminMsg = 
                     `🔥 <b>Новая заявка на турнир!</b>\n\n` +
                     `🛡 <b>Команда:</b> ${team_name}\n` +

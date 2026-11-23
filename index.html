@@ -3,164 +3,196 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Регистрация на турнир</title>
+    <title>Регистрация на турнир | Я-футболист</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
-            --bg: var(--tg-theme-bg-color, #ffffff);
-            --sec-bg: var(--tg-theme-secondary-bg-color, #f4f4f5);
-            --text: var(--tg-theme-text-color, #18181b);
-            --hint: var(--tg-theme-hint-color, #71717a);
-            --accent: var(--tg-theme-button-color, #2563eb);
+            --bg-color: var(--tg-theme-bg-color, #ffffff);
+            --secondary-bg: var(--tg-theme-secondary-bg-color, #f4f4f5);
+            --text-color: var(--tg-theme-text-color, #111827);
+            --hint-color: var(--tg-theme-hint-color, #6b7280);
+            --button-color: var(--tg-theme-button-color, #16a34a);
+            --button-text: var(--tg-theme-button-text-color, #ffffff);
+            --border-color: rgba(128, 128, 128, 0.15);
         }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            margin: 0;
-            padding: 16px 16px 32px;
+
+        * {
             box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding: 16px;
+            padding-bottom: 90px;
+            line-height: 1.4;
+        }
+
         .header {
             text-align: center;
             margin-bottom: 18px;
         }
+
         .header h1 {
             font-size: 20px;
-            margin: 0 0 4px;
             font-weight: 700;
+            margin-bottom: 4px;
         }
+
         .header p {
             font-size: 13px;
-            color: var(--hint);
-            margin: 0;
+            color: var(--hint-color);
         }
+
         .tabs {
             display: flex;
-            background-color: var(--sec-bg);
+            background: var(--secondary-bg);
             border-radius: 12px;
             padding: 4px;
-            margin-bottom: 20px;
-            gap: 4px;
+            margin-bottom: 18px;
         }
+
         .tab {
             flex: 1;
             text-align: center;
-            padding: 10px 4px;
-            border-radius: 9px;
-            font-weight: 600;
+            padding: 8px 4px;
             font-size: 13px;
-            color: var(--hint);
+            font-weight: 600;
+            border-radius: 9px;
+            color: var(--hint-color);
             cursor: pointer;
             transition: all 0.2s ease;
         }
+
         .tab.active {
-            background-color: var(--bg);
-            color: var(--text);
+            background: var(--bg-color);
+            color: var(--text-color);
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
         }
+
         .tab-content {
             display: none;
             animation: fadeIn 0.2s ease;
         }
+
         .tab-content.active {
             display: block;
         }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(4px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
         .form-group {
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
+
         label {
             display: block;
             font-size: 13px;
-            color: var(--hint);
-            margin-bottom: 6px;
             font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text-color);
         }
-        label span {
+
+        label span.req {
             color: #ef4444;
         }
+
         input, select, textarea {
             width: 100%;
-            padding: 13px 14px;
-            border-radius: 12px;
-            border: 1.5px solid transparent;
-            background-color: var(--sec-bg);
-            color: var(--text);
+            padding: 12px 14px;
             font-size: 15px;
-            font-family: inherit;
-            box-sizing: border-box;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            background-color: var(--secondary-bg);
+            color: var(--text-color);
             outline: none;
             transition: border-color 0.2s;
         }
+
         input:focus, select:focus, textarea:focus {
-            border-color: var(--accent);
+            border-color: var(--button-color);
         }
+
+        textarea {
+            resize: none;
+            height: 76px;
+        }
+
         .card {
-            background-color: var(--sec-bg);
+            background: var(--secondary-bg);
             border-radius: 14px;
-            padding: 16px;
+            padding: 14px;
             margin-bottom: 12px;
+            border: 1px solid var(--border-color);
         }
+
         .card-title {
-            display: flex;
-            align-items: center;
-            gap: 8px;
             font-size: 15px;
             font-weight: 700;
-            color: var(--accent);
-            margin: 0 0 8px;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
+
         .card p {
-            margin: 0;
-            font-size: 14px;
-            line-height: 1.5;
+            font-size: 13.5px;
+            color: var(--hint-color);
+            margin-bottom: 4px;
         }
+
+        .card p b {
+            color: var(--text-color);
+        }
+
         .badge {
             display: inline-block;
-            background-color: rgba(34, 197, 94, 0.15);
-            color: #16a34a;
+            padding: 4px 10px;
+            border-radius: 8px;
             font-size: 12px;
             font-weight: 600;
-            padding: 3px 8px;
-            border-radius: 6px;
-            margin-top: 8px;
+            background: rgba(22, 163, 74, 0.15);
+            color: #16a34a;
+            margin-top: 6px;
         }
+
         .empty-state {
             text-align: center;
-            color: var(--hint);
-            padding: 40px 16px;
+            padding: 36px 16px;
+            color: var(--hint-color);
             font-size: 14px;
-            line-height: 1.5;
         }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h1>⚽ Футбольный турнир «FORZA-CUP»</h1>
-        <p>Онлайн-регистрация команд и регламент</p>
+        <h1>⚽ Регистрация на турнир</h1>
+        <p>Заполните анкету команды за 1 минуту</p>
     </div>
 
     <div class="tabs">
-        <div class="tab active" onclick="switchTab('form', 0)">Заявка</div>
-        <div class="tab" onclick="switchTab('info', 1)">Инфо</div>
-        <div class="tab" onclick="switchTab('my', 2)">Мои заявки</div>
+        <div class="tab active" onclick="switchTab('form', 0)">📝 Заявка</div>
+        <div class="tab" onclick="switchTab('info', 1)">📋 Условия</div>
+        <div class="tab" onclick="switchTab('my', 2)">🏆 Мои заявки</div>
     </div>
 
-    <!-- Вкладка 1: Заявка -->
+    <!-- Вкладка 1: Форма -->
     <div id="tab-form" class="tab-content active">
         <div class="form-group">
-            <label>Название команды / школы <span>*</span></label>
-            <input type="text" id="team_name" placeholder="Например: ФШ Я-футболист">
+            <label>Название команды / клуба <span class="req">*</span></label>
+            <input type="text" id="team_name" placeholder="Например: ФК Партизан" required>
         </div>
 
         <div class="form-group">
-            <label>Возрастная категория <span>*</span></label>
+            <label>Год рождения игроков <span class="req">*</span></label>
             <select id="age_group">
                 <option value="2013 г.р.">2013 г.р.</option>
                 <option value="2014 г.р.">2014 г.р.</option>
@@ -176,42 +208,41 @@
         </div>
 
         <div class="form-group">
-            <label>ФИО тренера / представителя <span>*</span></label>
-            <input type="text" id="coach_name" placeholder="Иванов Иван Иванович">
+            <label>ФИО тренера / представителя <span class="req">*</span></label>
+            <input type="text" id="coach_name" placeholder="Иванов Иван Иванович" required>
         </div>
 
         <div class="form-group">
-            <label>Телефон для связи <span>*</span></label>
-            <input type="tel" id="phone" placeholder="+7 (999) 000-00-00" maxlength="18">
+            <label>Контактный телефон <span class="req">*</span></label>
+            <input type="tel" id="phone" placeholder="+7 (999) 000-00-00" required>
         </div>
 
         <div class="form-group">
-            <label>Комментарий (цвет формы, пожелания)</label>
-            <textarea id="comment" rows="3" placeholder="Основная форма синяя, запасная белая..."></textarea>
+            <label>Комментарий или пожелания</label>
+            <textarea id="comment" placeholder="Например: можем играть только после 12:00, заявляем 2 состава и т.д."></textarea>
         </div>
     </div>
 
-    <!-- Вкладка 2: Инфо о турнире -->
+    <!-- Вкладка 2: Информация -->
     <div id="tab-info" class="tab-content">
         <div class="card">
-            <div class="card-title">📅 Дата и место проведения</div>
-            <p><b>Стадион им. Брянских партизан</b><br>Начало матчей в 10:00. Сбор команд за 30 минут до первой игры.</p>
+            <div class="card-title">📍 Место проведения</div>
+            <p><b>Стадион:</b> им. Брянских партизан (г. Брянск)</p>
+            <p><b>Покрытие:</b> искусственный газон</p>
         </div>
+
         <div class="card">
-            <div class="card-title">🏆 Формат турнира</div>
-            <p>• Формат: 5+1 (для старших возрастов 7+1)<br>
-               • Продолжительность: 2 тайма по 15 минут<br>
-               • Мяч: №4<br>
-               • Система проведения: групповой этап + плей-офф (минимум 4 игры каждой команде)</p>
+            <div class="card-title">⏱ Возрастные категории</div>
+            <p><b>Участники:</b> команды 2013–2022 г.р.</p>
+            <p><b>2013–2014 г.р.:</b> формат 7+1 / 8+1</p>
+            <p><b>2015–2016 г.р.:</b> формат 6+1</p>
+            <p><b>2017–2018 г.р.:</b> формат 4+1</p>
+            <p><b>2019–2022 г.р.:</b> формат 3+1</p>
         </div>
+
         <div class="card">
-            <div class="card-title">💰 Взнос и награждение</div>
-            <p>Организационный взнос: <b>5 000 ₽</b> с команды.<br>
-               Кубки и медали призерам, индивидуальные статуэтки лучшим игрокам в каждой команде и номинациях.</p>
-        </div>
-        <div class="card">
-            <div class="card-title">📞 Контакты организатора</div>
-            <p>Telegram: @твой_никнейм<br>Телефон: +7 (999) 000-00-00</p>
+            <div class="card-title">🏅 Награждение</div>
+            <p>Кубки и медали призёрам, индивидуальные статуэтки лучшим игрокам в каждой команде и памятные призы всем участникам.</p>
         </div>
     </div>
 
@@ -222,6 +253,8 @@
 
     <script>
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxX8ecBSGpco8lpwDJ-UiMXQJniM9px7Lv6E_EgBZ-0xTZLf79KRKeLwfSKL3oCrDJdrQ/exec";
+        const BOT_TOKEN = "9108815966:AAHBw0anJNQmwdPvM4NWGRQOkALCJGWR2jc";
+        const ADMIN_CHAT_ID = "-1004370458629";
 
         const tg = window.Telegram.WebApp;
         tg.ready();
@@ -284,6 +317,19 @@
             `).reverse().join('');
         }
 
+        async function sendTgMsg(chatId, text) {
+            const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+            await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: String(chatId),
+                    text: text,
+                    parse_mode: 'HTML'
+                })
+            });
+        }
+
         tg.MainButton.onClick(async () => {
             const team_name = document.getElementById('team_name').value.trim();
             const age_group = document.getElementById('age_group').value;
@@ -300,9 +346,10 @@
             tg.MainButton.showProgress();
 
             const user = tg.initDataUnsafe?.user || {};
+            const username = user.username ? `@${user.username}` : "Нет юзернейма";
             const payload = {
                 user_id: user.id || 0,
-                username: user.username ? `@${user.username}` : "Нет юзернейма",
+                username,
                 team_name,
                 age_group,
                 coach_name,
@@ -311,12 +358,35 @@
             };
 
             try {
+                // 1. Записываем в Google Таблицу
                 await fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
                     mode: 'no-cors',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify(payload)
                 });
+
+                // 2. Отправляем в группу организаторов напрямую с устройства пользователя
+                const adminMsg = 
+                    `🔥 <b>Новая заявка на турнир!</b>\n\n` +
+                    `🛡 <b>Команда:</b> ${team_name}\n` +
+                    `📅 <b>Категория:</b> ${age_group}\n` +
+                    `👤 <b>Тренер:</b> ${coach_name}\n` +
+                    `📞 <b>Телефон:</b> <code>${phone}</code>\n` +
+                    `💬 <b>Telegram:</b> ${username}\n` +
+                    `📝 <b>Комментарий:</b> ${comment || "—"}\n\n` +
+                    `📊 <i>Запись добавлена в таблицу</i>`;
+
+                await sendTgMsg(ADMIN_CHAT_ID, adminMsg);
+
+                // 3. Отправляем подтверждение тренеру в личку
+                if (user.id) {
+                    const coachMsg = 
+                        `✅ <b>Ваша заявка принята!</b>\n\n` +
+                        `Команда <b>«${team_name}»</b> (${age_group}) зарегистрирована.\n` +
+                        `Организатор свяжется с вами в ближайшее время.`;
+                    await sendTgMsg(user.id, coachMsg);
+                }
 
                 localStorage.setItem('coach_profile', JSON.stringify({ team_name, coach_name, phone }));
                 

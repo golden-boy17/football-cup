@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Регистрация на турнир</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        :root {
+            --bg: var(--tg-theme-bg-color, #ffffff);
+            --sec-bg: var(--tg-theme-secondary-bg-color, #f4f4f5);
+            --text: var(--tg-theme-text-color, #18181b);
+            --hint: var(--tg-theme-hint-color, #71717a);
+            --accent: var(--tg-theme-button-color, #2563eb);
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 16px 16px 32px;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 18px;
+        }
+        .header h1 {
+            font-size: 20px;
+            margin: 0 0 4px;
+            font-weight: 700;
+        }
+        .header p {
+            font-size: 13px;
+            color: var(--hint);
+            margin: 0;
+        }
+        .tabs {
+            display: flex;
+            background-color: var(--sec-bg);
+            border-radius: 12px;
+            padding: 4px;
+            margin-bottom: 20px;
+            gap: 4px;
+        }
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px 4px;
+            border-radius: 9px;
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--hint);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .tab.active {
+            background-color: var(--bg);
+            color: var(--text);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        }
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.2s ease;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        label {
+            display: block;
+            font-size: 13px;
+            color: var(--hint);
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+        label span {
+            color: #ef4444;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 13px 14px;
+            border-radius: 12px;
+            border: 1.5px solid transparent;
+            background-color: var(--sec-bg);
+            color: var(--text);
+            font-size: 15px;
+            font-family: inherit;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--accent);
+        }
+        .card {
+            background-color: var(--sec-bg);
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+        .card-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--accent);
+            margin: 0 0 8px;
+        }
+        .card p {
+            margin: 0;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .badge {
+            display: inline-block;
+            background-color: rgba(34, 197, 94, 0.15);
+            color: #16a34a;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 6px;
+            margin-top: 8px;
+        }
+        .empty-state {
+            text-align: center;
+            color: var(--hint);
+            padding: 40px 16px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>⚽ Футбольный турнир</h1>
+        <p>Онлайн-регистрация команд и регламент</p>
+    </div>
+
+    <div class="tabs">
+        <div class="tab active" onclick="switchTab('form', 0)">Заявка</div>
+        <div class="tab" onclick="switchTab('info', 1)">Инфо</div>
+        <div class="tab" onclick="switchTab('my', 2)">Мои заявки</div>
+    </div>
+
+    <!-- Вкладка 1: Заявка -->
+    <div id="tab-form" class="tab-content active">
+        <div class="form-group">
+            <label>Название команды / школы <span>*</span></label>
+            <input type="text" id="team_name" placeholder="Например: ФШ Я-футболист">
+        </div>
+
+        <div class="form-group">
+            <label>Возрастная категория <span>*</span></label>
+            <select id="age_group">
+                <option value="2015 г.р.">2015 г.р.</option>
+                <option value="2016 г.р.">2016 г.р.</option>
+                <option value="2017 г.р.">2017 г.р.</option>
+                <option value="2018 г.р.">2018 г.р.</option>
+                <option value="2019 г.р.">2019 г.р.</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>ФИО тренера / представителя <span>*</span></label>
+            <input type="text" id="coach_name" placeholder="Иванов Иван Иванович">
+        </div>
+
+        <div class="form-group">
+            <label>Телефон для связи <span>*</span></label>
+            <input type="tel" id="phone" placeholder="+7 (999) 000-00-00" maxlength="18">
+        </div>
+
+        <div class="form-group">
+            <label>Комментарий (цвет формы, пожелания)</label>
+            <textarea id="comment" rows="3" placeholder="Основная форма синяя, запасная белая..."></textarea>
+        </div>
+    </div>
+
+    <!-- Вкладка 2: Инфо о турнире -->
+    <div id="tab-info" class="tab-content">
+        <div class="card">
+            <div class="card-title">📅 Дата и место проведения</div>
+            <p><b>Стадион им. Брянских партизан</b><br>Начало матчей в 10:00. Сбор команд за 30 минут до первой игры.</p>
+        </div>
+        <div class="card">
+            <div class="card-title">🏆 Формат турнира</div>
+            <p>• Формат: 5+1 (для старших возрастов 7+1)<br>
+               • Продолжительность: 2 тайма по 15 минут<br>
+               • Мяч: №4<br>
+               • Система проведения: групповой этап + плей-офф (минимум 4 игры каждой команде)</p>
+        </div>
+        <div class="card">
+            <div class="card-title">💰 Взнос и награждение</div>
+            <p>Организационный взнос: <b>5 000 ₽</b> с команды.<br>
+               Кубки и медали призерам, индивидуальные статуэтки лучшим игрокам в каждой команде и номинациях.</p>
+        </div>
+        <div class="card">
+            <div class="card-title">📞 Контакты организатора</div>
+            <p>Telegram: @твой_никнейм<br>Телефон: +7 (999) 000-00-00</p>
+        </div>
+    </div>
+
+    <!-- Вкладка 3: Мои заявки -->
+    <div id="tab-my" class="tab-content">
+        <div id="my-apps-list"></div>
+    </div>
+
+    <script>
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxX8ecBSGpco8lpwDJ-UiMXQJniM9px7Lv6E_EgBZ-0xTZLf79KRKeLwfSKL3oCrDJdrQ/exec";
+
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+        tg.expand();
+
+        tg.MainButton.text = "ОТПРАВИТЬ ЗАЯВКУ";
+        tg.MainButton.show();
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const saved = JSON.parse(localStorage.getItem('coach_profile') || '{}');
+            if (saved.team_name) document.getElementById('team_name').value = saved.team_name;
+            if (saved.coach_name) document.getElementById('coach_name').value = saved.coach_name;
+            if (saved.phone) document.getElementById('phone').value = saved.phone;
+            renderMyApplications();
+        });
+
+        document.getElementById('phone').addEventListener('input', function (e) {
+            let x = e.target.value.replace(/\D/g, '').match(/(\d{0,1})(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
+            if (!x[2]) {
+                e.target.value = x[1] ? '+7 ' : '';
+            } else {
+                e.target.value = '+7 (' + x[2] + (x[3] ? ') ' + x[3] : '') + (x[4] ? '-' + x[4] : '') + (x[5] ? '-' + x[5] : '');
+            }
+        });
+
+        function switchTab(tabName, index) {
+            if (tg.HapticFeedback) tg.HapticFeedback.selectionChanged();
+            
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            document.querySelectorAll('.tab')[index].classList.add('active');
+            document.getElementById('tab-' + tabName).classList.add('active');
+
+            if (tabName === 'form') {
+                tg.MainButton.show();
+            } else {
+                tg.MainButton.hide();
+                if (tabName === 'my') renderMyApplications();
+            }
+        }
+
+        function renderMyApplications() {
+            const list = document.getElementById('my-apps-list');
+            const apps = JSON.parse(localStorage.getItem('my_applications') || '[]');
+            
+            if (apps.length === 0) {
+                list.innerHTML = '<div class="empty-state">У вас пока нет отправленных заявок.<br>Заполните анкету на первой вкладке, чтобы зарегистрировать команду.</div>';
+                return;
+            }
+
+            list.innerHTML = apps.map(app => `
+                <div class="card">
+                    <div class="card-title">🛡 ${app.team_name} — ${app.age_group}</div>
+                    <p><b>Тренер:</b> ${app.coach_name}<br>
+                       <b>Телефон:</b> ${app.phone}<br>
+                       <b>Дата подачи:</b> ${app.date}</p>
+                    <div class="badge">✓ Заявка отправлена</div>
+                </div>
+            `).reverse().join('');
+        }
+
+        tg.MainButton.onClick(async () => {
+            const team_name = document.getElementById('team_name').value.trim();
+            const age_group = document.getElementById('age_group').value;
+            const coach_name = document.getElementById('coach_name').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const comment = document.getElementById('comment').value.trim();
+
+            if (!team_name || !coach_name || phone.length < 16) {
+                if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('error');
+                tg.showAlert("Пожалуйста, корректно заполните все обязательные поля (*)");
+                return;
+            }
+
+            tg.MainButton.showProgress();
+
+            const user = tg.initDataUnsafe?.user || {};
+            const payload = {
+                user_id: user.id || 0,
+                username: user.username ? `@${user.username}` : "Нет юзернейма",
+                team_name,
+                age_group,
+                coach_name,
+                phone,
+                comment
+            };
+
+            try {
+                await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payload)
+                });
+
+                localStorage.setItem('coach_profile', JSON.stringify({ team_name, coach_name, phone }));
+                
+                const apps = JSON.parse(localStorage.getItem('my_applications') || '[]');
+                apps.push({
+                    team_name,
+                    age_group,
+                    coach_name,
+                    phone,
+                    date: new Date().toLocaleDateString('ru-RU')
+                });
+                localStorage.setItem('my_applications', JSON.stringify(apps));
+
+                tg.MainButton.hideProgress();
+                if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+
+                tg.showPopup({
+                    title: 'Заявка принята!',
+                    message: `Команда «${team_name}» зарегистрирована. Подтверждение отправлено вам в чат.`,
+                    buttons: [{ type: 'ok' }]
+                }, () => {
+                    document.getElementById('comment').value = '';
+                    switchTab('my', 2);
+                });
+            } catch (e) {
+                tg.MainButton.hideProgress();
+                if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('error');
+                tg.showAlert("Ошибка соединения. Проверьте интернет и попробуйте еще раз.");
+            }
+        });
+    </script>
+</body>
+</html>
